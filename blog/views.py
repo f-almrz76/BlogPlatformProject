@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
 
 # Create your views here.
@@ -27,15 +27,22 @@ def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
     if request.method == 'POST':
-        comment = request.POST.get('comment')
-        author = request.POST.get('username')
-        if comment != None and author != None:
-            if Author.objects.filter(name=author).exists():
-                Comment.objects.create(post=post, author=author, content=comment)
+        if request.POST.get('update'):
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                form.save()
             else:
-                author = Author.objects.create(name=author)
-                Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+                form = CommentForm()
+        else:
+            comment = request.POST.get('comment')
+            author = request.POST.get('username')
+            if comment != None and author != None:
+                if Author.objects.filter(name=author).exists():
+                    Comment.objects.create(post=post, author=author, content=comment)
+                else:
+                    author = Author.objects.create(name=author)
+                    Comment.objects.create(post=post, author=author, content=comment)
+                return redirect('post_details', pk)
 
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
