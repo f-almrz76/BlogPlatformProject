@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.content }}</p>
+
+  <h2>Comments</h2>
+  {% for comment in post.comments.all %}
+    <div>
+      <p>{{ comment.content }}</p>
+      <a href="{% url 'update_comment' comment.id %}">Update</a>
+    </div>
+  {% empty %}
+    <p>No comments yet.</p>
+  {% endfor %}
+{% endblock %}
