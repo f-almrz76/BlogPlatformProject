@@ -1,67 +1,69 @@
 {%extends 'base.html'%}
- {% block title%}
-        <title>All Posts </title>
+{% block title%}
+<title>All Posts </title>
 {%endblock title%}
 {% block content%}
-        <!-- Post Content-->
-        <article class="mb-4">
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <h2 class="post-title">{{post.title}}</h2>
-                        <p>{{post.content}}</p>
-                        <p>
-                            Placeholder text by
-                            <a href="#">{{post.author}}</a>
-                            in
-                            <a href="#">{{post.publication_date}}</a>
-
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </article>
-<!-- Divider-->
-                    <hr class="my-4" />
- <!-- Post Comment-->
-        <article class="mb-4">
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    {% for comment in comments %}
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <h2 class="post-title"></h2>
-                        <p>{{comment.content}}</p>
-                        <p>
-                            comment write  by
-                            <a href="{% url 'author_details' comment.author_id %}">{{comment.author}}</a>
-                            in
-                            <p >{{comment.comment_date}}</p>
-
-
-                        </p>
-                    </div>
-                    {% endfor%}
-                </div>
-            </div>
-        </article>
-
-
-<!-- Form Comment -->
+<!-- Post Content-->
 <article class="mb-4">
-<div class="container px-4 px-lg-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h2 class="post-title">{{post.title}}</h2>
+                <p>{{post.content}}</p>
+                <p>
+                    Placeholder text by
+                    <a href="#">{{post.author}}</a>
+                    in
+                    <a href="#">{{post.publication_date}}</a>
 
-<form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post" action="{% url 'post_details' post.id %}">
-      {% csrf_token %}
-  <div class="col-md-4">
-  <label for="exampleFormControlInput1" class="form-label">Name</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="username">
-    <label for="validationCustom01" class="form-label">comment</label>
-      <textarea type="text" class="form-control" id="validationCustom01" value="" name="comment" required></textarea>
-       <button class="btn btn-primary mt-5" type="submit">Submit form</button>
-  </div>
-</form>
-</div>
+                </p>
+            </div>
+        </div>
+    </div>
 </article>
+<!-- Divider-->
+<hr class="my-4" />
+<!-- Post Comment-->
+
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            {% for comment in comments %}
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h2 class="post-title"></h2>
+                <p>{{ comment.content }}</p>
+                <p>
+                    Comment written by
+                    <a href="{% url 'author_details' comment.author_id %}">{{ comment.author }}</a>
+                    on
+                <p>{{ comment.comment_date }}</p>
+                </p>
+                <a href="{% url 'update_comment' comment.pk %}" class="btn btn-primary">Update Comment</a>
+            </div>
+            {% endfor %}
+
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h2 class="post-title">Add a Comment</h2>
+                <form method="post" class="needs-validation" novalidate action="{% url 'post_details' post.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder=""
+                            name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="validationCustom01" class="form-label">Comment</label>
+                        <textarea type="text" class="form-control" id="validationCustom01" value="" name="comment"
+                            required></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Submit Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</article>
+
+
 
 
 
