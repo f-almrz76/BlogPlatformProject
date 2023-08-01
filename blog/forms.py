@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Post
+from .models import Category, Post, Comment
 from users.models import Author
 
 
@@ -17,6 +17,10 @@ class CreatePostForm(forms.Form):
 
 
 class UpdateCommentForm(forms.Form):
+    class Meta:
+        model = Comment
+        fields = ['content']
+
     content = forms.CharField(widget=forms.Textarea)
 
     def save(self, comment):
