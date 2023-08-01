@@ -31,6 +31,11 @@
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <h2 class="post-title"></h2>
                         <p>{{comment.content}}</p>
+                        
+                        <form method="post" action="{% url 'post' %}">
+                            {% csrf token %}
+                            <button class="btn btn-primary mt-5" type="submit">Update</button>
+                        </form>
                         <p>
                             comment write  by
                             <a href="{% url 'author_details' comment.author_id %}">{{comment.author}}</a>

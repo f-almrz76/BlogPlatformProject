@@ -7,3 +7,6 @@ class ModelForm(forms.Form):
     publication_date = forms.DateField()
     category = forms.CharField()
     author = forms.CharField()
+
+class CommentForm(forms.Form):
+    content = forms.CharField()
