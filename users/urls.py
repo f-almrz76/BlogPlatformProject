@@ -10,6 +10,8 @@ urlpatterns = [
     path('posts/<int:pk>/', views.onepost, name="onepost"),
     path('categories/<int:pk>/', views.category_details, name="category_details"),
     path('createposts/', views.create_post, name="create_post"),
+    path('updatecomment/', views.update_comment, name="update_comment"),
+    path('comments/', views.comment, name="comment"),
  
 
 

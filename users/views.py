@@ -40,7 +40,7 @@ def create_post(request):
     context = {'form': form}
     return render(request, 'Blog/post.html', context)
 
-def Comment(request):
+def comment(request):
     all_comments = Comment.objects.all()
     return render(request, "Comment/comment_list.html", {"all_comments": all_comments})
 
