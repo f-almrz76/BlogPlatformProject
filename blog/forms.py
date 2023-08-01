@@ -3,7 +3,7 @@ from .models import Category, Post
 from users.models import Author
 
 
-class CreatePost(forms.Form):
+class CreatePostForm(forms.Form):
     title = forms.CharField(max_length=50)
     content = forms.CharField(widget=forms.Textarea)
     category = forms.ModelChoiceField(queryset=Category.objects.all())
