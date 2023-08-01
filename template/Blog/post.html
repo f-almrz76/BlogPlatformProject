@@ -36,6 +36,7 @@
                             <a href="{% url 'author_details' comment.author_id %}">{{comment.author}}</a>
                             in
                             <p >{{comment.comment_date}}</p>
+                            <a href="{% url 'update_comment' comment.id %}" class="btn btn-primary">Update Comment</a>
 
 
                         </p>
