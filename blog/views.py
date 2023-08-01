@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
+from .forms import UpdateCommentForm
 from users.models import Author
 
 
@@ -67,4 +68,21 @@ def category_details(request, pk):
         request,
         "Blog/category_details.html",
         {"category": category, "posts": posts, "authors": authors},
+    )
+
+
+def update_comment(request, pk):
+    if request.method == "POST":
+        comment = Comment.objects.get(pk=pk)
+        form = UpdateCommentForm(request.POST, isinstance=comment)
+        if form.is_valid():
+            form.save()
+        return redirect("update_comment", pk, {"form": form})
+
+    else:
+        form = UpdateCommentForm()
+    return render(
+        request,
+        "Blog/update_comment.html",
+        {"form": form},
     )
