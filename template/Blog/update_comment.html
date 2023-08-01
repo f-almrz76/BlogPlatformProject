@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+    <button type="submit">Update Comment</button>
+</form>
+
+{% endblock content %}
