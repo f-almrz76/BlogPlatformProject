@@ -27,22 +27,15 @@ def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
     if request.method == 'POST':
-        if request.POST.get('update'):
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                form.save()
+        comment = request.POST.get('comment')
+        author = request.POST.get('username')
+        if comment != None and author != None:
+            if Author.objects.filter(name=author).exists():
+                Comment.objects.create(post=post, author=author, content=comment)
             else:
-                form = CommentForm()
-        else:
-            comment = request.POST.get('comment')
-            author = request.POST.get('username')
-            if comment != None and author != None:
-                if Author.objects.filter(name=author).exists():
-                    Comment.objects.create(post=post, author=author, content=comment)
-                else:
-                    author = Author.objects.create(name=author)
-                    Comment.objects.create(post=post, author=author, content=comment)
-                return redirect('post_details', pk)
+                author = Author.objects.create(name=author)
+                Comment.objects.create(post=post, author=author, content=comment)
+            return redirect('post_details', pk)
 
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
@@ -73,4 +66,11 @@ def category_details(request, pk):
         authors = Author.objects.all()
         posts = category.post_set.all()
     return render(request, "Blog/category_details.html",
-                  {"category": category, 'posts': posts, 'authors': authors, 'form': form})
+                  {"category": category, 'posts': posts, 'authors': authors, 'form':form})
+
+
+
+def update_comment(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    form = CommentForm(initial={'content': comment.content})
+    return render(request, 'Blog/update_comment.html', {'form': form, 'comment': comment})
