@@ -9,8 +9,9 @@ from django.http import HttpResponse
 
 
 def home(request):
-    context = {}
-    return render(request, 'index.html', context)
+    query = request.GET.get('q')
+    author = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+    return render(request, 'template/index.html', {'author': author})
 
 
 def post_list(request):
