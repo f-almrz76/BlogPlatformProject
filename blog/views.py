@@ -81,7 +81,7 @@ def update_comment(request, comment_id):
         form = UpdateCommentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('Blog/postlist.html')
+            return redirect('Blog/post_list.html')
     else:
         form = UpdateCommentForm(instance=comment)
     return render(request, 'Blog/update_comment.html', {'form': form})
