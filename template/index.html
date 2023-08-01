@@ -7,7 +7,6 @@
         <input type="text" name="q" >
         <input type="submit" style="background-color: green;">
 </form>
-
 {% if last_post %}
     <h2>Last seen post:</h2>
     <p><a href="{% url 'post_details' last_post.id %}">{{ last_post.title }} by {{ last_post.author }}</a></p>
