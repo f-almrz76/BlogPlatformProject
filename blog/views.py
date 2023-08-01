@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
-from .forms import ModelForm
+from .forms import *
 
 
 # Create your views here.
@@ -65,3 +65,12 @@ def category_details(request, pk):
     return render(request, "Blog/category_details.html",
                   {"category": category, 'posts': posts, 'authors': authors})
 
+def update_comment(request):
+    if request.method=="POST":
+        comment=CommentForm(request.POST)
+        if comment.is_valid():
+            cd=comment.cleaned_data
+            Comment.objects.create(content=cd['content'])
+    else:
+        form=CommentForm()
+    return render(request, '"Blog/commnet_update.html"', {'form': form})
