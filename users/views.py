@@ -15,7 +15,7 @@ def author_details(request, pk):
     author = Author.objects.get(id=pk)
     return render(request, "Author/author.html", {"author": author})
 
-def category_detailes(request, pk):
+def category_details(request, pk):
     categories = Category.objects.get(id=pk)
     return render(request, "Blog/category_details.html", {"category": categories})
 
