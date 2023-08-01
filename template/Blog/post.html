@@ -36,8 +36,9 @@
                             <a href="{% url 'author_details' comment.author_id %}">{{comment.author}}</a>
                             in
                             <p >{{comment.comment_date}}</p>
-
-
+                            <form action="{% url 'update_comment' comment.id %}" method="get">
+                                <button type="" class="btn btn-primary">Update</button>
+                            </form>
                         </p>
                     </div>
                     {% endfor%}

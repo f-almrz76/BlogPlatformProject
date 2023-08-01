@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
 
+from .forms import PostForm,CommentUpdateForm
 
 # Create your views here.
 
@@ -14,6 +15,11 @@ def home(request):
         cd = Post.objects.filter(Q(title__icontains=search) | Q(content__icontains=search))
         context = {'searched': cd}
 
+    last_seen_post_id = request.session.get("last_seen_post", None)
+    if last_seen_post_id:
+        last_seen_post = Post.objects.get(id=last_seen_post_id)
+        context["last_seen_post"] = last_seen_post
+
     return render(request, 'index.html', context)
 
 
@@ -24,6 +30,7 @@ def post_list(request):
 
 def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    request.session["last_seen_post"] = pk
     comments = post.comment_set.all()
     if request.method == 'POST':
         comment = request.POST.get('comment')
@@ -51,11 +58,34 @@ def category_list(request):
 
 
 def category_details(request, pk):
+    category = Category.objects.get(id=pk)
+
     if request.method == 'POST':
-        pass
-    else:
-        category = Category.objects.get(id=pk)
-        authors = Author.objects.all()
-        posts = category.post_set.all()
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.category = category
+            post.save()
+            return redirect('category_details', pk=pk)
+
+    authors = Author.objects.all()
+    posts = category.post_set.all()
+
+    form = PostForm(initial={'category': category})
     return render(request, "Blog/category_details.html",
-                  {"category": category, 'posts': posts, 'authors': authors})
+                  {"category": category, 'posts': posts, 'authors': authors, "form":form})
+
+
+def update_comment(request, pk):
+    comment = get_object_or_404(Comment, id=pk)
+
+    if request.method == 'POST':
+        form = CommentUpdateForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('post_details', pk=comment.post.id)
+    else:
+        form = CommentUpdateForm(instance=comment)
+
+    context = {'form': form, 'comment': comment}
+    return render(request, 'Blog/update_comment.html', context)
