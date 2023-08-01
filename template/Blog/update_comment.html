@@ -1,0 +1,37 @@
+{%extends 'base.html'%}
+{% block title%}
+<title>Update Comments</title>
+{%endblock title%}
+{% block content%}
+
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% for comment in comments%}
+            <!-- Post preview-->
+            <div class="post-preview col">
+                <div>
+                    <a href="{% url 'post_details' post.id%}">
+                        <h2 class="post-title">{{comment.post}}</h2>
+                        <h3 class="post-subtitle">{{comment.author}}</h3>
+                    </a>
+                    <p class="post-meta">
+                        Posted by
+                        <a href="#!">{{comment.content}}</a>
+                        on {{comment.comment_date}}
+                    </p>
+                </div>
+                <div>
+                    <button class="btn btn-primary mt-5" type="submit">Update</button>
+                </div>
+            </div>
+            <!-- Divider-->
+            <hr class="my-4" />
+            {% endfor%}
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
