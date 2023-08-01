@@ -1,8 +1,10 @@
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import Post, Category, Comment
 from users.models import Author
 from django.http import HttpResponse
+from itertools import chain
+from .forms import PostForm
 
 
 # Create your views here.
@@ -33,4 +35,28 @@ def category_list(request):
 
 def category_details(request, pk):
     category = Category.objects.get(id=pk)
-    return render(request, "Blog/category_details.html", {"category": category })
+    posts = Post.objects.filter(category=pk)
+    form = PostForm()
+    if request.method == 'GET':
+        return render(request, "Blog/category_details.html", {"category": category , 'form': form, 'posts': posts})
+    if request.method == 'POST':
+        new_post = PostForm(request.post)
+        if new_post.is_valid():
+            new_post_model = new_post.save
+        return render(request, "Blog/category_details.html", {"category": category , 'form': form, 'posts': posts})
+
+
+
+
+def search_result(request):
+    print(request)
+    if request.method == 'POST':
+        searched_content = request.POST['searched']
+        posts1 = Post.objects.filter(title__contains=searched_content)
+        posts2 = Post.objects.filter(content__contains=searched_content)
+        results = list(chain(posts1 , posts2))
+        # results = posts1
+        print('results: ', results)
+        return render(request, 'index.html', {'results': results})
+    else:
+        return render(request, 'index.html', {})

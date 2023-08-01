@@ -3,23 +3,22 @@
         <title>Maktab Blog </title>
 {%endblock title%}
 {% block content%}
-        <div class="row p-5 m-5">
-                <input type="search" name="searched" placeholder="search...">
-                <input type="submit" class="btn btn-success">
-        </div>
-        {% if results %}
 
-                {% for post in results %}
+
+
+                {% for post in posts %}
                 <div class="col-4 py-5 my-2 mx-2 postss bg-gradient" id="post" style="border-style: solid; background-color: rgba(77, 57, 175, 0.507); border-radius: 10px;">
                         <h2 >{{ post.title }}</h2>
                         <p>{{ post.content| truncatewords:"10" }}</p>
                         <a href="{% url 'post_details' post.id %}">watch more...</a>
                 </div>
                 {% endfor %}
-                <h2>End of results</h2>
-        {% else %}
-                <h2>Forgot to search</h2>
 
-        {% endif %}
+                <hr>
+                <hr>
+                <div class="col-4 py-5 my-2 mx-2 postss bg-gradient" id="post" style="border-style: solid; background-color: rgba(77, 57, 175, 0.507); border-radius: 10px;">
+                    {{ form }}
+                </div>
+
 
 {% endblock content%}
