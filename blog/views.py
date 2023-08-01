@@ -10,6 +10,12 @@ from django.utils import timezone
 
 def home(request):
     context = {}
+    last_seen_post_pk = request.session.get('last_seen_post')
+    if last_seen_post_pk is not None:
+        last_seen_post = get_object_or_404(Post, pk=last_seen_post_pk)
+    else:
+        last_seen_post = None
+    context['last_seen_post'] = last_seen_post
     if request.GET.get('search'):
         search = request.GET['search']
         cd = Post.objects.filter(Q(title__icontains=search) | Q(content__icontains=search))
