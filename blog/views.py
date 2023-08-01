@@ -15,6 +15,11 @@ def home(request):
         cd = Post.objects.filter(Q(title__icontains=search) | Q(content__icontains=search))
         context = {'searched': cd}
 
+    last_seen_post_id = request.session.get("last_seen_post", None)
+    if last_seen_post_id:
+        last_seen_post = Post.objects.get(id=last_seen_post_id)
+        context["last_seen_post"] = last_seen_post
+
     return render(request, 'index.html', context)
 
 
