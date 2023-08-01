@@ -10,12 +10,17 @@ from users.models import Author
 
 def home(request):
     context = {}
+    user = request.user
+    if request.session.get[user.pk]:
+        post = request.session.get[user.pk]["last_seen_post"]
+    else:
+        post = None
     if request.GET.get("search"):
         search = request.GET["search"]
         cd = Post.objects.filter(
             Q(title__icontains=search) | Q(content__icontains=search)
         )
-        context = {"searched": cd}
+        context = {"searched": cd, "post": post}
 
     return render(request, "index.html", context)
 
@@ -28,6 +33,9 @@ def post_list(request):
 def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
+    user = request.user
+    request.session[user.pk] = {"last_seen_post": post}
+    request.session.modified = True
     if request.method == "POST":
         comment = request.POST.get("comment")
         author = request.POST.get("username")
@@ -85,4 +93,13 @@ def update_comment(request, pk):
         request,
         "Blog/update_comment.html",
         {"form": form},
+    )
+
+
+def author_details(request, pk):
+    author = Author.objects.get(pk=pk)
+    return render(
+        request,
+        "Blog/category_details.html",
+        {"author": author},
     )
