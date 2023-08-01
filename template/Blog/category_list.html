@@ -33,5 +33,29 @@
 </form>
 </div>
 </article>
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Categories</h1>
+
+  <ul>
+    {% for category in categories %}
+      <li>{{ category.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <div class="category-form">
+    <h2>Create a Category</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <button type="submit">Create</button>
+    </form>
+  </div>
+
+{% endblock %}
 
 {% endblock content%}
