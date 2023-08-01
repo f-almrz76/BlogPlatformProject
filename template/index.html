@@ -7,4 +7,21 @@
         <input type="text" name="q" >
         <input type="submit" style="background-color: green;">
 </form>
+
+{% if last_post %}
+    <h2>Last seen post:</h2>
+    <p><a href="{% url 'post_details' last_post.id %}">{{ last_post.title }} by {{ last_post.author }}</a></p>
+  {% endif %}
+
+  <h2>Latest posts:</h2>
+  {% if latest_posts %}
+    <ul>
+      {% for post in latest_posts %}
+        <li><a href="{% url 'post_details' post.id %}">{{ post.title }} by {{ post.author }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No posts found.</p>
+  {% endif %}
+
 {% endblock content%}
