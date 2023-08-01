@@ -51,8 +51,15 @@ def category_list(request):
 
 
 def category_details(request, pk):
+    category = Category.objects.get(id=category_id)
+    posts = Post.objects.filter(category=category)
     if request.method == 'POST':
-        pass
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.category = category
+            post.save()
+            return HttpResponse('Post created successfully')
     else:
         category = Category.objects.get(id=pk)
         authors = Author.objects.all()
