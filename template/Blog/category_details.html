@@ -16,7 +16,7 @@
     </div>
 </article>
 <!-- Divider-->
-<hr class="my-4"/>
+<hr class="my-4" />
 <!-- Post of category -->
 <article class="mb-4">
     <div class="container px-4 px-lg-5">
@@ -44,11 +44,12 @@
 <article class="mb-4">
     <div class="container px-4 px-lg-5">
         <!--{{author}}-->
-        <form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post"
-              action="{% url 'category_details' category.id %}">
+        <h2>Create a new post</h2>
+        <form method="post">
             {% csrf_token %}
-                {{ form.as_p}}
-                <button class="btn btn-dark mt-2" type="submit">Submit form</button>
+            {{ form.as_p }}
+            <input type="text" name="username" placeholder="Your Name" required>
+            <input type="submit" value="Create Post">
         </form>
     </div>
 </article>
