@@ -80,3 +80,16 @@ def update_comment(request, post_id, comment_id):
         else:
             form = CommentUpdateForm(initial={'content': comment.content})
         return render(request, 'comment_update.html', {'form': form})
+
+def post_details(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    request.session['last_seen_post'] = post_id
+    return render(request, 'post_details.html', {'post': post})
+
+def home(request):
+    last_seen_post_id = request.session.get('last_seen_post')
+    if last_seen_post_id:
+        last_seen_post = get_object_or_404(Post, pk=last_seen_post_id)
+        return render(request, 'home.html', {'last_seen_post': last_seen_post})
+    else:
+        return render(request, 'home.html')
