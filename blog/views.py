@@ -36,8 +36,6 @@ def category_details(request, pk):
     return render(request, "Blog/category_details.html", {"category": category })
 
 
-
-
 def category_view(request):
     context = {}
 
@@ -49,3 +47,15 @@ def category_view(request):
 
     context['form'] = form
     return render(request, "category_details.html", context)
+
+
+def view_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+    request.session['last_post_id'] = post_id
+    return render(request, 'post.html', {'post': post})
+
+
+def show_last_post(request):
+    last_post_id = request.session.get('last_post_id')
+    last_post = Post.objects.get(id=last_post_id)
+    return render(request, 'dashboard.html', {'last_post': last_post})
