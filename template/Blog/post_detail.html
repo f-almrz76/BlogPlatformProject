@@ -10,7 +10,6 @@
       <p>{{ comment.content }}</p>
       <a href="{% url 'update_comment' comment.id %}">Update</a>
     </div>
-  {% empty %}
     <p>No comments yet.</p>
   {% endfor %}
 {% endblock %}
