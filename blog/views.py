@@ -58,6 +58,7 @@ def category_details(request, pk):
             post = form.save()
             post.publication_date = timezone.now()
             post.save()
+            return redirect(request.path)
     else:
         category = Category.objects.get(id=pk)
         authors = Author.objects.all()
