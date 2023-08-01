@@ -24,14 +24,14 @@ def post_list(request):
 
 def post_details(request, pk):
         post = get_object_or_404(Post, pk=pk)
-        recently_viewed_tasks = None
+        recently_viewed_post = None
 
         if 'recently_viewed' in request.session:
             if pk in request.session['recently_viewed']:
                 request.session['recently_viewed'].remove(pk)
 
             posts = Post.objects.filter(pk__in = request.session['recently_viewed'])
-            recently_viewed_tasks = sorted(posts,key = lambda x: request.session['recently_viewed'].index(x.pk))
+            recently_viewed_post = sorted(posts,key = lambda x: request.session['recently_viewed'].index(x.pk))
             request.session['recently_viewed'].insert(0, pk)
             if len(request.session['recently_viewed']) > 5:
                 request.session['recently_viewed'].pop()
@@ -54,7 +54,7 @@ def post_details(request, pk):
                     Comment.objects.create(post=post, author=author, content=comment)
                 return redirect('post_details', pk)
 
-        return render(request, "Blog/post.html", {"post": post, "comments": comments,'recently_viewed_tasks':recently_viewed_tasks})
+        return render(request, "Blog/post.html", {"post": post, "comments": comments,'recently_viewed_post':recently_viewed_post})
 
 
 def category_list(request):
