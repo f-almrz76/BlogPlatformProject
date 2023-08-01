@@ -1,0 +1,11 @@
+{%extends 'base.html'%}
+ {% block title%}
+        <title>Uodate comment</title>
+{%endblock title%}
+{% block content%}
+    <form method="post" action="{% url 'update_comment' comment_id %}">
+        {% csrf_token %}
+        {{ form }}
+       <button class="btn btn-primary mt-5" type="submit">Update</button>
+    </form>
+{% endblock %}
