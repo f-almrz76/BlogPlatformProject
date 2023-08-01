@@ -11,16 +11,21 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                        {% for post in all_posts%}
                     <!-- Post preview-->
-                    <div class="post-preview">
-                        <a href="{% url 'post_details' post.id%}">
-                            <h2 class="post-title">{{post.title}}</h2>
-                            <h3 class="post-subtitle">{{post.category}}</h3>
-                        </a>
-                        <p class="post-meta">
-                            Posted by
-                            <a href="#!">{{post.author}}</a>
-                            on {{post.publication_date}}
-                        </p>
+                    <div class="post-preview col">
+                        <div>
+                            <a href="{% url 'post_details' post.id%}">
+                                <h2 class="post-title">{{post.title}}</h2>
+                                <h3 class="post-subtitle">{{post.category}}</h3>
+                            </a>
+                            <p class="post-meta">
+                                Posted by
+                                <a href="#!">{{post.author}}</a>
+                                on {{post.publication_date}}
+                            </p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary mt-5" type="submit">Update</button>
+                        </div>
                     </div>
                     <!-- Divider-->
                     <hr class="my-4" />
