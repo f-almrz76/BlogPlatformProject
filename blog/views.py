@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
+from .forms import ModelForm
 
 
 # Create your views here.
@@ -52,10 +53,15 @@ def category_list(request):
 
 def category_details(request, pk):
     if request.method == 'POST':
-        pass
+        form=ModelForm(request.POST)
+        if form.is_valid():
+            cd=form.cleaned_data
+            Post.objects.create(title=cd['title'], content=cd['content'], publication_date=cd['publication_date'],
+                                category=cd['category'], author=cd['author'])
     else:
         category = Category.objects.get(id=pk)
         authors = Author.objects.all()
         posts = category.post_set.all()
     return render(request, "Blog/category_details.html",
                   {"category": category, 'posts': posts, 'authors': authors})
+
