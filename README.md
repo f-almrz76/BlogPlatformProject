@@ -18,7 +18,7 @@
 ### 3. Session
 1. Use the session to save the last seen post.
 2. Show this post in home page.
-3. The title and author of the post must be clickable
+3. The title and author of the post must be clickable.
 
 
 ## NOTE 📄
