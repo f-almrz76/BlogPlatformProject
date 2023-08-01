@@ -61,7 +61,10 @@ def category_details(request, pk):
             title=cd["title"]
             content= cd["content"]
             author=cd["author"]
-            Post.objects.create(title=title,content=content,category=pk ,author=author)
+            category=Category.objects.get(id=pk)
+            authors = Author.objects.all()
+            posts = category.post_set.all()
+            Post.objects.create(title=title,content=content,category=category ,author=author)
     else:
         category = Category.objects.get(id=pk)
         authors = Author.objects.all()
