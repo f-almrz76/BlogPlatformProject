@@ -26,6 +26,8 @@ def post_list(request):
 def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
+    request.session['last_seen_post'] = pk
+
     if request.method == 'POST':
         comment = request.POST.get('comment')
         author = request.POST.get('username')
