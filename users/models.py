@@ -11,5 +11,17 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    categories = models.ForeignKey(Category, on_delete=models.CASCADE)
+    
+
+    def __str__(self):
+        return self.title
+
 
 
