@@ -13,10 +13,10 @@ def home(request):
     if request.GET.get('search'):
         search = request.GET['search']
         cd = Post.objects.filter(Q(title__icontains=search) | Q(content__icontains=search))
-        id=request.session["last_seen_post_id"]
+        idd=request.session["last_seen_post_id"]
         author_id=request.session["last_seen_post_author"]
         title=request.session["last_seen_post_title"]
-        context = {'searched': cd,"id":id,"author_id":author_id,"title":title}
+        context = {'searched': cd,"idd":idd,"author_id":author_id,"title":title}
 
     return render(request, 'index.html', context)
 
