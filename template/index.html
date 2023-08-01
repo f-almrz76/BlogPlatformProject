@@ -1,57 +1,58 @@
-{%extends 'base.html'%}
- {% block title%}
-        <title>Maktab Blog </title>
-{%endblock title%}
-{% block content%}
+{% extends 'base.html' %}
+{% block title %}
+<title>Maktab Blog</title>
+{% endblock title %}
+{% block content %}
 
-
-
-{% if searched %}
+{% if searched_posts %}
 <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% for post in searched_posts %}
+            <!-- Post preview -->
+            <div class="post-preview">
+                <a href="{% url 'post_details' post.id %}">
+                    <h2 class="post-title">{{ post.title }}</h2>
+                    <h3 class="post-subtitle">{{ post.category }}</h3>
+                </a>
+                <p class="post-meta">
+                    Posted by
+                    <a href="#!">{{ post.author }}</a>
+                    on {{ post.publication_date }}
+                </p>
+            </div>
+            {% empty %}
+            <div class="post-preview">
+                <h2 class="post-title">Not found!</h2>
+            </div>
+            <!-- Divider -->
+            <hr class="my-4" />
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    {% for post in searched %}
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                        <a href="{% url 'post_details' post.id%}">
-                            <h2 class="post-title">{{post.title}}</h2>
-                            <h3 class="post-subtitle">{{post.category}}</h3>
-                        </a>
-                        <p class="post-meta">
-                            Posted by
-                            <a href="#!">{{post.author}}</a>
-                            on {{post.publication_date}}
-                        </p>
-                    </div>
-                     {% empty %}
-                     <div class="post-preview">
-                            <h2 class="post-title"> Not fond !</h2>
-
-                    </div>
-                    <!-- Divider-->
-                    <hr class="my-4" />
-                    {% endfor%}
-                </div>
+{% if last_seen_post %}
+<article class="m-6">
+    <div class="container px-5 px-lg-5">
+        <div class="card row gx-4 gx-lg-5 justify-content-center" style="width: 18rem;">
+            <div class="card-body">
+                <a href="{% url 'post_details' last_seen_post.id %}">
+                    <h5 class="card-title">{{ last_seen_post.title }}</h5>
+                </a>
+                <a href="{% url 'author_details' last_seen_post.author.id %}">
+                    <h6 class="card-subtitle mb-2 text-muted">{{ last_seen_post.category }}</h6>
+                </a>
+                <p class="card-text">{{ last_seen_post.content }}</p>
+                <a href="{% url 'post_details' last_seen_post.id %}" class="card-link">Read more</a>
+                <a href="{% url 'author_details' last_seen_post.author.id %}" class="card-link">View author</a>
             </div>
         </div>
-
-
-{% endif%}
-
-<article class="m-6">
-<div class="container px-5 px-lg-5">
-<div class="card row gx-4 gx-lg-5 justify-content-center " style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">Last viewed post</h5>
-    <h6 class="card-subtitle mb-2 text-muted"></h6>
-    <p class="card-text"></p>
-    <a href="" class="card-link">post link</a>
-    <a href="" class="card-link">author link</a>
-  </div>
-</div>
-</div>
+    </div>
 </article>
+{% endif %}
 
 
-{% endblock content%}
+
+{% endblock content %}

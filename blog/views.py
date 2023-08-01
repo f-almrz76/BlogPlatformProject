@@ -8,15 +8,27 @@ from .forms import PostForm, UpdateCommentForm
 
 
 def home(request):
-    context = {}
+    last_seen_post_id = request.session.get("last_seen_post_id")
+    last_seen_post = (
+        get_object_or_404(Post, id=last_seen_post_id) if last_seen_post_id else None
+    )
+
     if request.GET.get("search"):
         search = request.GET["search"]
-        cd = Post.objects.filter(
+        searched_posts = Post.objects.filter(
             Q(title__icontains=search) | Q(content__icontains=search)
         )
-        context = {"searched": cd}
+    else:
+        searched_posts = None
 
-    return render(request, "index.html", context)
+    return render(
+        request,
+        "index.html",
+        {
+            "searched_posts": searched_posts,
+            "last_seen_post": last_seen_post,
+        },
+    )
 
 
 def post_list(request):
@@ -36,6 +48,8 @@ def post_details(request, pk):
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
+                request.session["last_seen_post_id"] = post.id
+                print(request.session.get("last_seen_post_id"))
             return redirect("post_details", pk)
 
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
