@@ -10,4 +10,4 @@ class PostForm(ModelForm):
 
 
 class UpdateComment(forms.Form):
-    
+    pass
