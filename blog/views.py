@@ -59,3 +59,13 @@ def category_details(request, pk):
         posts = category.post_set.all()
     return render(request, "Blog/category_details.html",
                   {"category": category, 'posts': posts, 'authors': authors})
+
+def update_post(request, id):
+    post = get_object_or_404(Post, pk=id)
+    if request.method == "POST":
+        content = request.POST.get("content")
+        Post.content = content
+        Post.save()
+        return redirect("post_details", id=id)
+    else:
+        return render(request, "post.html", {"post": post})
