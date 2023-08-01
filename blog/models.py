@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import Author
 from django.urls import reverse
+from django.forms import ModelForm
 
 
 # Create your models here.
@@ -31,3 +32,10 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return f"{self.post}:{self.author}, {self.comment_date}"
+
+
+class PostForm(ModelForm) :
+    class Meta:
+        model = Post
+        fields =["title", "content", "publication_date", "category", "author"]
+    
