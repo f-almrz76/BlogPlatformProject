@@ -13,7 +13,10 @@ def home(request):
     if request.GET.get('search'):
         search = request.GET['search']
         cd = Post.objects.filter(Q(title__icontains=search) | Q(content__icontains=search))
-        context = {'searched': cd}
+        id=request.session["last_seen_post_id"]
+        author_id=request.session["last_seen_post_author"]
+        title=request.session["last_seen_post_title"]
+        context = {'searched': cd,"id":id,"author_id":author_id,"title":title}
 
     return render(request, 'index.html', context)
 
@@ -37,6 +40,9 @@ def post_details(request, pk):
                 Comment.objects.create(post=post, author=author, content=comment)
             return redirect('post_details', pk)
 
+    request.session["last_seen_post_id"] = post.id
+    request.session["last_seen_post_author"] = post.author.id
+    request.session["last_seen_post_title"] = post.title
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
