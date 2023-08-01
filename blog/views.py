@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
 from django.http import HttpResponse
-
+from .forms import PostForm
 
 # Create your views here.
 
@@ -34,3 +34,18 @@ def category_list(request):
 def category_details(request, pk):
     category = Category.objects.get(id=pk)
     return render(request, "Blog/category_details.html", {"category": category })
+
+
+
+
+def category_view(request):
+    context = {}
+
+    form = PostForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+
+        form.save()
+
+    context['form'] = form
+    return render(request, "category_details.html", context)
