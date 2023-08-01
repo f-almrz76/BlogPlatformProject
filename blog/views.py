@@ -25,6 +25,7 @@ def post_list(request):
 
 def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    request.session['last_seen_post'] = pk
     comments = post.comment_set.all()
     if request.method == 'POST':
         comment = request.POST.get('comment')
@@ -74,3 +75,8 @@ def update_comment(request, comment_id):
     comment = Comment.objects.get(id=comment_id)
     form = CommentForm(initial={'content': comment.content})
     return render(request, 'Blog/update_comment.html', {'form': form, 'comment': comment})
+
+def last_post(request):
+    last_seen_post_id = request.session.get('last_seen_post')
+    if last_seen_post_id:
+        return redirect('post_details', last_seen_post_id)
