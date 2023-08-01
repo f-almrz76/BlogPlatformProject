@@ -43,11 +43,11 @@
 <div class="container px-5 px-lg-5">
 <div class="card row gx-4 gx-lg-5 justify-content-center " style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">Last viewed post</h5>
+    <h5 class="card-title">last seen post</h5>
     <h6 class="card-subtitle mb-2 text-muted"></h6>
     <p class="card-text"></p>
-    <a href="" class="card-link">post link</a>
-    <a href="" class="card-link">author link</a>
+    <a  class="card-link" href="{% url 'post_details' idd  %}">{{title}}</a>
+    <a class="card-link" href="{% url 'author_details' author_id  %}">author link</a>
   </div>
 </div>
 </div>
