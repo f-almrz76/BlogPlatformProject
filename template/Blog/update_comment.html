@@ -1,0 +1,14 @@
+{%extends 'base.html'%}
+ {% block title%}
+        <title>Update commment </title>
+{%endblock title%}
+{% block content%}
+<div class="container">
+    <form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post"
+    action="{% url 'update_comment'%}">
+    {% csrf_token %}
+      {{ form.as_p}}
+      <button class="btn btn-dark mt-2" type="submit" value="update">update</button>
+</form>
+
+</div>
