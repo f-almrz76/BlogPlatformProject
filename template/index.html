@@ -40,14 +40,15 @@
 {% endif%}
 
 <article class="m-6">
-<div class="container px-5 px-lg-5">
+<div class="container px-5 px-lg-5 mb-4">
 <div class="card row gx-4 gx-lg-5 justify-content-center " style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">Last viewed post</h5>
+  <div class="card-body my-5 text-center">
+    <h5 class="card-title text-center">Last viewed post</h5>
     <h6 class="card-subtitle mb-2 text-muted"></h6>
     <p class="card-text"></p>
-    <a href="{% url 'post_details' last_seen_post.id %}" class="card-link">{{ last_seen_post }}</a>
-    <a href="{% url 'author_details' last_seen_post.author.id %}" class="card-link">{{ last_seen_post.author }}</a>
+    <a href="{% url 'post_details' last_seen_post.id %}" class="card-link text-primary h3">{{ last_seen_post }}</a>
+    <br><br><br>
+    <i>Author: <a href="{% url 'author_details' last_seen_post.author.id %}" class="card-link text-primary mt-5">{{ last_seen_post.author }}</i></a>
   </div>
 </div>
 </div>
