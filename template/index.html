@@ -45,9 +45,13 @@
   <div class="card-body">
     <h5 class="card-title">Last viewed post</h5>
     <h6 class="card-subtitle mb-2 text-muted"></h6>
-    <p class="card-text"></p>
-    <a href="" class="card-link">post link</a>
-    <a href="" class="card-link">author link</a>
+    {% if post %}
+    <p class="card-text">{{ post.content }}</p>
+    {% else %}
+    <p class="card-text">You haven't seen any post yet!</p>
+    {% endif %}
+    <a href="{% url 'post_details' post.pk %}" class="card-link">post link</a>
+    <a href="{% url 'author_detail' author.pk %}" class="card-link">author link</a>
   </div>
 </div>
 </div>
