@@ -36,8 +36,7 @@
                     <a href="{% url 'author_details' comment.author_id %}">{{comment.author}}</a>
                     in
                 <p>{{comment.comment_date}}</p>
-
-
+                <button><a href="{% url 'update_comment' comment.id %}">Update</a></button>
                 </p>
             </div>
             {% endfor%}
@@ -64,12 +63,6 @@
         </form>
     </div>
 </article>
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" name="update">Update Comment</button>
-</form>
 
 
 
