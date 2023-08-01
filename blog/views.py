@@ -9,12 +9,14 @@ from users.models import Author
 
 def home(request):
     context = {}
-    if request.GET.get('search'):
-        search = request.GET['search']
-        cd = Post.objects.filter(Q(title__icontains=search) | Q(content__icontains=search))
-        context = {'searched': cd}
+    if request.GET.get("search"):
+        search = request.GET["search"]
+        cd = Post.objects.filter(
+            Q(title__icontains=search) | Q(content__icontains=search)
+        )
+        context = {"searched": cd}
 
-    return render(request, 'index.html', context)
+    return render(request, "index.html", context)
 
 
 def post_list(request):
@@ -25,24 +27,24 @@ def post_list(request):
 def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
-    if request.method == 'POST':
-        comment = request.POST.get('comment')
-        author = request.POST.get('username')
+    if request.method == "POST":
+        comment = request.POST.get("comment")
+        author = request.POST.get("username")
         if comment != None and author != None:
             if Author.objects.filter(name=author).exists():
                 Comment.objects.create(post=post, author=author, content=comment)
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+            return redirect("post_details", pk)
 
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
 def category_list(request):
-    if request.method == 'POST':
-        name = request.POST['name']
-        description = request.POST['description']
+    if request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
         Category.objects.create(name=name, description=description)
 
     all_category = Category.objects.all()
@@ -51,11 +53,18 @@ def category_list(request):
 
 
 def category_details(request, pk):
-    if request.method == 'POST':
-        pass
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        Category.objects.create(name=name, description=description)
+        return redirect("category_details", pk)
+
     else:
         category = Category.objects.get(id=pk)
         authors = Author.objects.all()
         posts = category.post_set.all()
-    return render(request, "Blog/category_details.html",
-                  {"category": category, 'posts': posts, 'authors': authors})
+    return render(
+        request,
+        "Blog/category_details.html",
+        {"category": category, "posts": posts, "authors": authors},
+    )
