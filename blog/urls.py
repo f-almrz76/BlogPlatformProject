@@ -7,5 +7,5 @@ urlpatterns = [
     path('post/<int:pk>/', post_details, name="post_details"),
     path('categories/', category_list, name="category_list"),
     path('categories/<int:pk>/', category_details, name="category_details"),
-
+    path('update/<int:pk>/', update_comment, name="update"),
 ]
