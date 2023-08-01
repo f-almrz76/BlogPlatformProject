@@ -39,6 +39,7 @@ def post_details(request, pk):
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
+
 def category_list(request):
     if request.method == 'POST':
         name = request.POST['name']
