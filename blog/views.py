@@ -66,3 +66,12 @@ def category_details(request, pk):
         "Blog/category_details.html",
         {"category": category, "posts": posts, "authors": authors, "form": form},
     )
+
+
+def update_comments(request, pk):
+    if request.method == "POST":
+        pass
+    else:
+        comments = Comment.objects.get(pk=pk)
+        context = {"comments": comments}
+        return render(request, "Blog/update_comments.html", context)
