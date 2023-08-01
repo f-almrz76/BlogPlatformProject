@@ -2,7 +2,8 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
-
+from .forms import CreatePostForm
+from django.utils import timezone
 
 # Create your views here.
 
@@ -52,7 +53,11 @@ def category_list(request):
 
 def category_details(request, pk):
     if request.method == 'POST':
-        pass
+        form = CreatePostForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            post.publication_date = timezone.now()
+            post.save()
     else:
         category = Category.objects.get(id=pk)
         authors = Author.objects.all()
