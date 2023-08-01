@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>Update Comment</title>
+{% endblock title %}
+
+{% block content %}
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h2 class="post-title">Update Comment</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-primary mt-3" type="submit">Update Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock content %}
