@@ -14,3 +14,12 @@ class CreatePostForm(forms.Form):
         post = Post(title=cd['title'], content=cd['content'], category=cd['category'], author=cd['author'])
         post.save()
         return post
+
+
+class UpdateCommentForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea)
+
+    def save(self, comment):
+        comment.content = self.cleaned_data['content']
+        comment.save()
+        return comment
