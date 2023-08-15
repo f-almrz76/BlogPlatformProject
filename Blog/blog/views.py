@@ -67,6 +67,7 @@ class UpdateComment(UpdateView):
     model = Comment
     fields = ['content']
     template_name = "Blog/comment_update.html"
+    success_url = reverse_lazy("Blog/post.html")
 
 def category_list(request):
     if request.method == 'POST':
@@ -95,4 +96,4 @@ def category_details(request, pk):
         authors = Author.objects.all()
         posts = category.post_set.all()
     return render(request, "Blog/category_details.html",
-                  {"category": category, 'posts': posts, 'authors': authors, 'form': form})
+                {"category": category, 'posts': posts, 'authors': authors, 'form': form})
