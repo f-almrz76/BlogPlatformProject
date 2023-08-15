@@ -1,12 +1,14 @@
+from typing import Any, Dict
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms.models import BaseModelForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
 from .forms import PostCreationForm, CommentUpdateForm, CommentCreationForm
 from django.http import HttpResponse
 from django.views.generic import DetailView, UpdateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 
 # Create your views here.
@@ -27,22 +29,46 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
-        comment = request.POST.get('comm')
-        author = request.POST.get('username')
-        if comment != None and author != None:
+# def post_details(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     comments = post.comment_set.all()
+#     if request.method == 'POST':
+#         comment = request.POST.get('comm')
+#         author = request.POST.get('username')
+#         if comment != None and author != None:
+#             if Author.objects.filter(name=author).exists():
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             else:
+#                 author = Author.objects.create(name=author)
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             return redirect('post_details', pk)
+
+#     return render(request, "Blog/post.html", {"post": post, "comments": comments})
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'Blog/post.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comment_set.all()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        comment = request.Post.get('comm')
+        author = request.Post.get('username')
+
+        if comment and author:
             if Author.objects.filter(name=author).exists():
                 Comment.objects.create(post=post, author=author, content=comment)
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
-
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
-
+            return redirect('post_details', pk= post.pk)
+        
+        return self.get(request , *args, **kwargs)
 
 def comment_update(request, pk):
     comment = Comment.objects.get(id=pk)
@@ -60,6 +86,18 @@ def comment_update(request, pk):
 
     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = 'Blog/comment_update.html'
+    pk_url_kwarg = 'pk'
+    context_object_name = 'comm'
+
+    def get_success_url(self) -> str:
+        return reverse('post_details', args= (self.object.post.id,))
+    
+    def form_valid(self, form) -> HttpResponse:
+        return super().form_valid(form)
 
 def category_list(request):
     if request.method == 'POST':
