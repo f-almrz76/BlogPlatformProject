@@ -14,7 +14,7 @@
                     {% for post in searched %}
                     <!-- Post preview-->
                     <div class="post-preview">
-                        <a href="{% url 'post_details' post.id%}">
+                        <a href="{% url 'blog:post_details' post.id%}">
                             <h2 class="post-title">{{post.title}}</h2>
                             <h3 class="post-subtitle">{{post.category}}</h3>
                         </a>
@@ -39,19 +39,21 @@
 
 {% endif%}
 
+{% if post %}
 <article class="m-6">
 <div class="container px-5 px-lg-5">
 <div class="card row gx-4 gx-lg-5 justify-content-center " style="width: 18rem;">
   <div class="card-body">
     <h5 class="card-title">Last viewed post</h5>
-    <h6 class="card-subtitle mb-2 text-muted"></h6>
+    <h6 class="card-subtitle mb-2 text-muted">{{ post.title }}</h6>
     <p class="card-text"></p>
-    <a href="" class="card-link">post link</a>
-    <a href="" class="card-link">author link</a>
+    <a href="{% url 'blog:post_details' post.id %}" class="card-link">post link</a>
+    <a href="{% url 'author_details' post.author_id %}" class="card-link">author link</a>
   </div>
 </div>
 </div>
 </article>
 
+{% endif %}
 
 {% endblock content%}
