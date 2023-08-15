@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.contrib.sessions.models import Session
 
+
 from .models import Post, Category, Comment
 
 # Register your models here.

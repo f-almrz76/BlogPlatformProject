@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from users.admin import author_admin_site
+from users.models import Author
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,3 +30,5 @@ urlpatterns = [
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += staticfiles_urlpatterns()
+author_site = admin.AdminSite(name='author_admin_site')
+author_site.register(Author)

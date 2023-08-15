@@ -66,7 +66,7 @@ class CommentUpdateView(UpdateView):
         return initial
 
     def get_success_url(self):
-        return reverse ('post_details', args=[self.object.post.id])
+        return reverse('post_details', args=[self.object.post.id])
 
 
 def category_list(request):
