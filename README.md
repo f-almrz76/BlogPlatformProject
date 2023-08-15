@@ -4,26 +4,19 @@
 
 ## Quiz Time 📝
 
-### 1. Create Post
-1. Write a ModelForm for creating a post.
-2. Complete `category_details` view for getting information and create a new post for the category.
+### 1. DetailView
+1. Overwrite the function `post_detail` using the DetailView.
 
-### 2. Update Comment
-1. Create a form use forms.Form for updating content of comment.
-2. Create an update button next to each comment on the `post_details` page.
-3. Create a html page for update comment.
-4. Write a view to get information and update a comment.
+### 2. UpdateView
+1. Overwrite the function `comment_update` using the UpdateView.
 
-
-### 3. Session
-1. Use the session to save the last seen post.
-2. Show this post in home page.
-3. The title and author of the post must be clickable
+### 3. Admin panel
+1. Create a separate admin panel with the `author_admin` url for the `users` app that includes the `Author` model.
 
 
 ## NOTE 📄
 1. You should fork this repository and send pull request when you are done.
 2. Don't forget appropriate commit.
-3. Pay attention to the models that have foreign keys!!
+
 
 #### Good Luck :v:
