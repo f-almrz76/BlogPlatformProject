@@ -6,5 +6,13 @@ from django.contrib.admin import AdminSite
 
 admin.site.register(Author)
 
+class AuthorAdminSite(AdminSite):
+    site_header = "Blog Author admin"
+    site_title = "Blog Author Admin Portal"
+
+author_admin_site = AuthorAdminSite(name='author_admin')
+
+author_admin_site.register(Author)
+
 
 

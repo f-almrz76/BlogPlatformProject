@@ -26,6 +26,7 @@ urlpatterns = [
     path('author_admin/', author_admin_site.urls),
     path('', include('blog.urls', namespace='blog')),
     path('users/', include('users.urls')),
+    path('author-admin/', author_admin_site.urls)
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += staticfiles_urlpatterns()
