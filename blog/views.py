@@ -27,38 +27,33 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post.html'
+    context_object_name = 'post'
+
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        comments = post.comment_set.all()
         comment = request.POST.get('comm')
         author = request.POST.get('username')
-        if comment != None and author != None:
+        if comment is not None and author is not None:
             if Author.objects.filter(name=author).exists():
                 Comment.objects.create(post=post, author=author, content=comment)
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+            return redirect('post_detail', pk=post.pk)
+        return self.render_to_response(self.get_context_data(post=post, comments=comments))
+class CommentUpdate(UpdateView):
+    model = Comment
+    fields = ['name']
+    template_name = 'Blog/comment_update.html'
+    context_object_name = 'comm'
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+    def get_success_url(self):
+        return reverse_lazy('post_details', kwargs={'pk': self.object.post.id})
 
-
-def comment_update(request, pk):
-    comment = Comment.objects.get(id=pk)
-    if request.method == "POST":
-        form = CommentUpdateForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            comment.content = cd['content']
-            comment.save()
-            return redirect('post_details', comment.post.id)
-    else:
-        form = CommentUpdateForm(initial=
-                                 {'content': comment.content}
-                                 )
-
-    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
 
 def category_list(request):
