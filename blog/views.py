@@ -90,12 +90,21 @@ def category_details(request, pk):
     return render(request, "Blog/category_details.html",
                   {"category": category, 'posts': posts, 'authors': authors})
 
-def update_comment(request):
-    if request.method=="POST":
-        comment=CommentForm(request.POST)
-        if comment.is_valid():
-            cd=comment.cleaned_data
-            Comment.objects.create(content=cd['content'])
-    else:
-        form=CommentForm()
-    return render(request, '"Blog/commnet_update.html"', {'form': form})
+# def update_comment(request):
+#     if request.method=="POST":
+#         comment=CommentForm(request.POST)
+#         if comment.is_valid():
+#             cd=comment.cleaned_data
+#             Comment.objects.create(content=cd['content'])
+#     else:
+#         form=CommentForm()
+#     return render(request, '"Blog/commnet_update.html"', {'form': form})
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'Blog/comment_update.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+    
