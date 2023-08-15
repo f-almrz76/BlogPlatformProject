@@ -22,10 +22,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from users.admin import author_admin_site
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('author_admin/', author_admin_site.urls),
-    path('', include('blog.urls', namespace='blog')),
-    path('users/', include('users.urls')),
+    path("admin/", admin.site.urls),
+    path("author_admin/", author_admin_site.urls, name="custom_author_admin"),
+    path("", include("blog.urls", namespace="blog")),
+    path("users/", include("users.urls")),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += staticfiles_urlpatterns()
