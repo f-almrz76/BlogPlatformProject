@@ -54,7 +54,20 @@ class PostDetailView(DetailView):
         context['comments'] = self.object.comment_set.all()
         return context
     
-    
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        comment = request.Post.get('comm')
+        author = request.Post.get('username')
+
+        if comment and author:
+            if Author.objects.filter(name=author).exists():
+                Comment.objects.create(post=post, author=author, content=comment)
+            else:
+                author = Author.objects.create(name=author)
+                Comment.objects.create(post=post, author=author, content=comment)
+            return redirect('post_details', pk= post.pk)
+        
+        return self.get(request , *args, **kwargs)
 
 def comment_update(request, pk):
     comment = Comment.objects.get(id=pk)
