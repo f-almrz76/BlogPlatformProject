@@ -27,21 +27,27 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'Blog/post.html'
+    context_object_name = 'post'
+
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
         comment = request.POST.get('comm')
         author = request.POST.get('username')
-        if comment != None and author != None:
+        if (comment != None)  and  (author != None):
             if Author.objects.filter(name=author).exists():
                 Comment.objects.create(post=post, author=author, content=comment)
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+            return redirect('post_details', pk=post.pk)
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comment_set.all()
+        return context
 
 
 def comment_update(request, pk):
@@ -59,6 +65,21 @@ def comment_update(request, pk):
                                  )
 
     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
+
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = 'Blog/comment_update.html'
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        return redirect('post_details', self.object.post.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comm'] = self.object
+        return context
 
 
 def category_list(request):
