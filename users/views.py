@@ -10,6 +10,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from users.forms import CustomLoginForm
 
+def author_admin(request):
+    admin_site = site
+    return admin_site.index(request)
 
 def login_view(request):
 

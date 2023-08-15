@@ -27,38 +27,74 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'Blog/post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comment_set.all()
+        context['comment_form'] = CommentForm(initial={'username': 'Anonymous'})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         comment = request.POST.get('comm')
         author = request.POST.get('username')
-        if comment != None and author != None:
+
+        if comment and author:
             if Author.objects.filter(name=author).exists():
-                Comment.objects.create(post=post, author=author, content=comment)
+                author_instance = Author.objects.get(name=author)
             else:
-                author = Author.objects.create(name=author)
-                Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+                author_instance = Author.objects.create(name=author)
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+            Comment.objects.create(post=self.object, author=author_instance, content=comment)
+            return redirect('post_details', pk=self.object.pk)
+
+        return self.get(request, *args, **kwargs)
 
 
-def comment_update(request, pk):
-    comment = Comment.objects.get(id=pk)
-    if request.method == "POST":
-        form = CommentUpdateForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            comment.content = cd['content']
-            comment.save()
-            return redirect('post_details', comment.post.id)
-    else:
-        form = CommentUpdateForm(initial=
-                                 {'content': comment.content}
-                                 )
+# def post_details(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     comments = post.comment_set.all()
+#     if request.method == 'POST':
+#         comment = request.POST.get('comm')
+#         author = request.POST.get('username')
+#         if comment != None and author != None:
+#             if Author.objects.filter(name=author).exists():
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             else:
+#                 author = Author.objects.create(name=author)
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             return redirect('post_details', pk)
 
-    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
+#     return render(request, "Blog/post.html", {"post": post, "comments": comments})
+
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = 'Blog/comment_update.html'
+
+    def get_success_url(self):
+        return reverse_lazy('post_details', kwargs={'pk': self.object.post.id})
+
+
+# def comment_update(request, pk):
+#     comment = Comment.objects.get(id=pk)
+#     if request.method == "POST":
+#         form = CommentUpdateForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             comment.content = cd['content']
+#             comment.save()
+#             return redirect('post_details', comment.post.id)
+#     else:
+#         form = CommentUpdateForm(initial=
+#                                  {'content': comment.content}
+#                                  )
+
+#     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
 
 def category_list(request):
