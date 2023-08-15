@@ -46,7 +46,7 @@ class PostDetailView(DetailView):
             return redirect('post_detail', pk=post.pk)
         return self.render_to_response(self.get_context_data(post=post, comments=comments))
 
-    
+
 class CommentUpdate(UpdateView):
     model = Comment
     form_class =CommentUpdateForm
@@ -54,7 +54,7 @@ class CommentUpdate(UpdateView):
     context_object_name = 'comm'
 
     def get_success_url(self):
-        return reverse_lazy('post_details', kwargs={'pk': self.object.post.id})
+        return reverse_lazy('blog:post_details', kwargs={'pk': self.object.post.id})
 
 
 
