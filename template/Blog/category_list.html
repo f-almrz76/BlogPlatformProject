@@ -6,13 +6,13 @@
 
    <!-- Main Content-->
         <div class="container px-4 px-lg-5">
-
+{{request.header}}
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
                        {% for cat in all_category%}
                     <!-- categoty preview-->
                     <div class="post-preview">
-                        <a href="{% url 'category_details' cat.id %}">
+                        <a href="{% url 'blog:category_details' cat.id %}">
                             <h2 class="post-title">{{cat.name}}</h2>
                         </a>
                             <h6 class="post-subtitle">{{cat.description}}</h6>
@@ -28,8 +28,15 @@
 <article class="mb-4">
 <div class="container px-4 px-lg-5">
 
-<form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" >
-
+<form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post" action="{% url 'blog:category_list' %}">
+      {% csrf_token %}
+  <div class="col-md-4">
+  <label for="exampleFormControlInput1" class="form-label">Name</label>
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="name">
+    <label for="validationCustom01" class="form-label">Description</label>
+      <textarea type="text" class="form-control" id="validationCustom01" value="" name="description" ></textarea>
+       <button class="btn btn-primary mt-5" type="submit">Submit form</button>
+  </div>
 </form>
 </div>
 </article>

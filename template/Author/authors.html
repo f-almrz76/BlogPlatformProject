@@ -11,18 +11,15 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                        {% for author in all_author%}
                     <!-- Post preview-->
-                    <a href="{% url 'author_details' author.id %}">
-                    <p class="post-meta text-center">
-
-                            <img src="{{author.image.url}}"  class="img-fluid img-thumbnail"  >
+                    <p class="post-meta">
+                            <img src="author.image.url">
                         </p>
                     <div class="post-preview">
-
+                        <a href="{% url 'author_details' author.id %}">
                             <h2 class="post-title">{{author.name}}</h2>
-
+                        </a>
 
                     </div>
-                         </a>
                     <!-- Divider-->
                     <hr class="my-4" />
                     {% endfor%}

@@ -21,7 +21,20 @@
 <article class="mb-4">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
+            {% for post in posts %}
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <a href="{% url 'blog:post_details' post.id %}">
+                    <h2 class="post-title">{{post.title}}</h2>
+                </a>
+                <p>
+                    Author text by
+                    <a href="#">{{post.author}}</a>
+                    in
+                    <a href="#">{{post.publication_date}}</a>
 
+                </p>
+            </div>
+            {% endfor%}
         </div>
     </div>
 </article>
@@ -31,8 +44,11 @@
 <article class="mb-4">
     <div class="container px-4 px-lg-5">
         <!--{{author}}-->
-        <form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" >
-
+        <form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post"
+              action="{% url 'blog:category_details' category.id %}">
+            {% csrf_token %}
+                {{ form.as_p}}
+                <button class="btn btn-dark mt-2" type="submit">Submit form</button>
         </form>
     </div>
 </article>
