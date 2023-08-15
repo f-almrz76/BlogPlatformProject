@@ -1,6 +1,7 @@
 from typing import Any, Dict
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms.models import BaseModelForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
@@ -94,6 +95,9 @@ class CommentUpdateView(UpdateView):
 
     def get_success_url(self) -> str:
         return reverse('post_details', args= (self.object.post.id,))
+    
+    def form_valid(self, form) -> HttpResponse:
+        return super().form_valid(form)
 
 def category_list(request):
     if request.method == 'POST':
