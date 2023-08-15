@@ -28,7 +28,7 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
+'''def post_details(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comment_set.all()
     if request.method == 'POST':
@@ -42,7 +42,7 @@ def post_details(request, pk):
                 Comment.objects.create(post=post, author=author, content=comment)
             return redirect('post_details', pk)
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+    return render(request, "Blog/post.html", {"post": post, "comments": comments})'''
 
 
 class PostDetailView(DetailView):
@@ -68,7 +68,7 @@ class PostDetailView(DetailView):
         return self.render_to_response(self.get_context_data(comments=comments))
 
 
-def comment_update(request, pk):
+'''def comment_update(request, pk):
     comment = Comment.objects.get(id=pk)
     if request.method == "POST":
         form = CommentUpdateForm(request.POST)
@@ -82,7 +82,7 @@ def comment_update(request, pk):
                                  {'content': comment.content}
                                  )
 
-    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
+    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})'''
 
 
 class CommentUpdateView(UpdateView):
