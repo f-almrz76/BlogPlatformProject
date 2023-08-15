@@ -3,10 +3,50 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Category, Comment
 from users.models import Author
 from .forms import *
+from django.views.generic import ListView,DetailView,UpdateView
 
 
 # Create your views here.
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "Blog/post.html"
+    context_object_name = "post"
+    pk_url_kwarg = "pk"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.object
+        comments = post.comment_set.all()
+        context["comments"] = comments
+        return context
+
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        comment = request.POST.get('comm')
+        author_name = request.POST.get('username')
+        
+        if comment and author_name:
+            author, created = Author.objects.get_or_create(name=author_name)
+            Comment.objects.create(post=post, author=author, content=comment)
+        
+        return redirect('post_details', pk=post.pk)
+    
+
+# def post_details(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     comments = post.comment_set.all()
+#     if request.method == 'POST':
+#         comment = request.POST.get('comment')
+#         author = request.POST.get('username')
+#         if comment != None and author != None:
+#             if Author.objects.filter(name=author).exists():
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             else:
+#                 author = Author.objects.create(name=author)
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             return redirect('post_details', pk)
+
+#     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 def home(request):
     context = {}
@@ -23,21 +63,6 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
-        comment = request.POST.get('comment')
-        author = request.POST.get('username')
-        if comment != None and author != None:
-            if Author.objects.filter(name=author).exists():
-                Comment.objects.create(post=post, author=author, content=comment)
-            else:
-                author = Author.objects.create(name=author)
-                Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
-
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
 def category_list(request):
