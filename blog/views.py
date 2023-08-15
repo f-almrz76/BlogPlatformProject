@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.views.generic import DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
 
@@ -27,38 +28,62 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
-        comment = request.POST.get('comm')
-        author = request.POST.get('username')
-        if comment != None and author != None:
-            if Author.objects.filter(name=author).exists():
-                Comment.objects.create(post=post, author=author, content=comment)
-            else:
-                author = Author.objects.create(name=author)
-                Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+class PostDetail(DetailView):
+    
+    model = Post
+    template_name = "Blog/post.html"
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context['empty_choice'] = self.object.choice_query.exists()
+        return context
+    
+
+# def post_details(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     comments = post.comment_set.all()
+#     if request.method == 'POST':
+#         comment = request.POST.get('comm')
+#         author = request.POST.get('username')
+#         if comment != None and author != None:
+#             if Author.objects.filter(name=author).exists():
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             else:
+#                 author = Author.objects.create(name=author)
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             return redirect('post_details', pk)
+
+#     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
-def comment_update(request, pk):
-    comment = Comment.objects.get(id=pk)
-    if request.method == "POST":
-        form = CommentUpdateForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            comment.content = cd['content']
-            comment.save()
-            return redirect('post_details', comment.post.id)
-    else:
-        form = CommentUpdateForm(initial=
-                                 {'content': comment.content}
-                                 )
+class UpdateComment(UpdateView):
+    model = Comment
+    template_name = 'Blog/comment_update.html'
 
-    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
+    fields = ["content"]
+
+    success_url = 'post_details'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context['empty_choice'] = self.object.choice_query.exists()
+        return context
+
+# def comment_update(request, pk):
+#     comment = Comment.objects.get(id=pk)
+#     if request.method == "POST":
+#         form = CommentUpdateForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             comment.content = cd['content']
+#             comment.save()
+#             return redirect('post_details', comment.post.id)
+#     else:
+#         form = CommentUpdateForm(initial=
+#                                  {'content': comment.content}
+#                                  )
+
+#     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
 
 def category_list(request):
