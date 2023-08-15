@@ -33,10 +33,10 @@
                         <p>{{comment.content}}</p>
                         <p>
                             comment write  by
-                            <a href="{% url 'author_details' comment.author_id %}">{{comment.author}}</a>
+                            <a href="#">{{comment.author}}</a>
                             in
-                            <p >{{comment.comment_date}}</p>
-
+                            <a href="#">{{comment.comment_date}}</a>
+                            <a href="{% url 'blog:comment_update' comment.id%}" class="btn btn-primary mt-5" >update</a>
 
                         </p>
                     </div>
@@ -50,13 +50,10 @@
 <article class="mb-4">
 <div class="container px-4 px-lg-5">
 
-<form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post" action="{% url 'post_details' post.id %}">
+<form class=" row gx-4 gx-lg-5 justify-content-center needs-validation" novalidate method="post" action="{% url 'blog:post_details' post.id %}">
       {% csrf_token %}
   <div class="col-md-4">
-  <label for="exampleFormControlInput1" class="form-label">Name</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="username">
-    <label for="validationCustom01" class="form-label">comment</label>
-      <textarea type="text" class="form-control" id="validationCustom01" value="" name="comment" required></textarea>
+        {{form.as_p}}
        <button class="btn btn-primary mt-5" type="submit">Submit form</button>
   </div>
 </form>
