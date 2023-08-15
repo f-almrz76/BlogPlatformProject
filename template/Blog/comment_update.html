@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+ {% block title%}
+        <title>Comments</title>
+{%endblock title%}
+{% block content%}
+
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {{ form_asp }}
+                        <button class="btn btn-primary mt-5" type="submit">Submit form</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endblock %}
