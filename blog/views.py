@@ -6,8 +6,8 @@ from users.models import Author
 from .forms import PostCreationForm, CommentUpdateForm, CommentCreationForm
 from django.http import HttpResponse
 from django.views.generic import DetailView, UpdateView
-from django.urls import reverse_lazy
-
+from django.urls import reverse_lazy,reverse
+from django.views import generic
 
 # Create your views here.
 
@@ -27,10 +27,19 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
+class PostDetailView(generic.DetailView):
+    template_name="Blog/post.html"
+    model=Post
+    context_object_name='post'
+
+    def get_context_data(self, **kwargs):
+        post=self.object
+        context = super().get_context_data(**kwargs)
+        context['comments'] = post.comment_set.all()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
         comment = request.POST.get('comm')
         author = request.POST.get('username')
         if comment != None and author != None:
@@ -39,26 +48,23 @@ def post_details(request, pk):
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+            return redirect('post_detail', pk=self.kwargs.get('pk'))
+        return super().post(request, *args, **kwargs)
+    
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+class CommentUpdateView(generic.UpdateView):
+    template_name = 'Blog/comment_update.html'
+    model = Comment
+    form_class = CommentUpdateForm
+    success_url = '/'
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['content'] = self.object.content
+        return initial
 
-def comment_update(request, pk):
-    comment = Comment.objects.get(id=pk)
-    if request.method == "POST":
-        form = CommentUpdateForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            comment.content = cd['content']
-            comment.save()
-            return redirect('post_details', comment.post.id)
-    else:
-        form = CommentUpdateForm(initial=
-                                 {'content': comment.content}
-                                 )
-
-    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
+    def get_success_url(self):
+        return reverse('post_details', args=[self.object.post.id])
 
 
 def category_list(request):
