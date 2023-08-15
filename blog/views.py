@@ -67,6 +67,21 @@ def comment_update(request, pk):
     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
 
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = 'Blog/comment_update.html'
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        return redirect('post_details', self.object.post.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comm'] = self.object
+        return context
+
+
 def category_list(request):
     if request.method == 'POST':
         name = request.POST['name']
