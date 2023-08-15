@@ -6,8 +6,8 @@ from users.models import Author
 from .forms import PostCreationForm, CommentUpdateForm, CommentCreationForm
 from django.http import HttpResponse
 from django.views.generic import DetailView, UpdateView
-from django.urls import reverse_lazy
-
+from django.urls import reverse_lazy,reverse
+from django.views import generic
 
 # Create your views here.
 
@@ -44,21 +44,19 @@ def post_details(request, pk):
     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
-def comment_update(request, pk):
-    comment = Comment.objects.get(id=pk)
-    if request.method == "POST":
-        form = CommentUpdateForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            comment.content = cd['content']
-            comment.save()
-            return redirect('post_details', comment.post.id)
-    else:
-        form = CommentUpdateForm(initial=
-                                 {'content': comment.content}
-                                 )
+class CommentUpdateView(generic.UpdateView):
+    template_name = 'Blog/comment_update.html'
+    model = Comment
+    form_class = CommentUpdateForm
+    success_url = '/'
 
-    return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['content'] = self.object.content
+        return initial
+
+    def get_success_url(self):
+        return reverse('post_details', args=[self.object.post.id])
 
 
 def category_list(request):
