@@ -72,3 +72,4 @@ def update_comment(request, comment_id):
             return redirect('post_detail', comment_id=comment.id)
 
     return render(request, 'update_comment.html', {'form': form})
+
