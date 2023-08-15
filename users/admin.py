@@ -4,7 +4,12 @@ from django.contrib.admin import AdminSite
 
 # Register your models here.
 
-admin.site.register(Author)
+# admin.site.register(Author)
 
 
 
+class MyAdminSite(AdminSite):
+    site_header = "Author Site"
+
+author_admin_site = MyAdminSite(name="myadmin")
+author_admin_site.register(Author)
