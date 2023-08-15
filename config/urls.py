@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from users.admin import author_admin_site
+from users.author_admin import AuthorAdmin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
