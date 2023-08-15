@@ -7,6 +7,7 @@ from .forms import PostCreationForm, CommentUpdateForm, CommentCreationForm
 from django.http import HttpResponse
 from django.views.generic import DetailView, UpdateView
 from django.urls import reverse_lazy
+from django.views.generic.detail import DetailView
 
 
 # Create your views here.
@@ -27,10 +28,17 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
+class PostDetails(DetailView):
+    model = Post
+    template_name = "Blog/post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["comments"] = self.object.comment_set.all()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
         comment = request.POST.get('comm')
         author = request.POST.get('username')
         if comment != None and author != None:
@@ -39,9 +47,9 @@ def post_details(request, pk):
             else:
                 author = Author.objects.create(name=author)
                 Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+            return redirect('post_details', post.id)
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+        return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
 
 def comment_update(request, pk):
