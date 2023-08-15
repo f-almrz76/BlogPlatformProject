@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.contrib.sessions.models import Session
-
+from users.admin import author_admin_site
 from .models import Post, Category, Comment
 
 # Register your models here.
