@@ -7,7 +7,7 @@ urlpatterns = [
     path('post/<int:pk>/', PostDetailView.as_view(), name="post_details"),
     path('categories/', category_list, name="category_list"),
     path('categories/<int:pk>/', category_details, name="category_details"),
-    path('update/',CommentUpdateView.as_view(),name='update'),
+    path('comment/<int:pk>/update/',CommentUpdateView.as_view(),name='update'),
 
 
 ]
