@@ -7,7 +7,7 @@ from .forms import PostCreationForm, CommentUpdateForm, CommentCreationForm
 from django.http import HttpResponse
 from django.views.generic import DetailView, UpdateView
 from django.urls import reverse_lazy
-
+from django.views.generic.detail import DetailView
 
 # Create your views here.
 
