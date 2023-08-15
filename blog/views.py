@@ -45,9 +45,11 @@ class PostDetailView(DetailView):
                 Comment.objects.create(post=post, author=author, content=comment)
             return redirect('post_detail', pk=post.pk)
         return self.render_to_response(self.get_context_data(post=post, comments=comments))
+
+    
 class CommentUpdate(UpdateView):
     model = Comment
-    fields = ['name']
+    form_class =CommentUpdateForm
     template_name = 'Blog/comment_update.html'
     context_object_name = 'comm'
 
