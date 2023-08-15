@@ -85,7 +85,14 @@ def comment_update(request, pk):
 
     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = 'Blog/comment_update.html'
+    pk_url_kwarg = 'pk'
+    context_object_name = 'comm'
 
+    
 def category_list(request):
     if request.method == 'POST':
         name = request.POST['name']
