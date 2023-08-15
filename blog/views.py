@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -27,22 +28,28 @@ def post_list(request):
     return render(request, "Blog/post_list.html", {"all_posts": all_posts})
 
 
-def post_details(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comment_set.all()
-    if request.method == 'POST':
-        comment = request.POST.get('comm')
-        author = request.POST.get('username')
-        if comment != None and author != None:
-            if Author.objects.filter(name=author).exists():
-                Comment.objects.create(post=post, author=author, content=comment)
-            else:
-                author = Author.objects.create(name=author)
-                Comment.objects.create(post=post, author=author, content=comment)
-            return redirect('post_details', pk)
+# def post_details(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     comments = post.comment_set.all()
+#     if request.method == 'POST':
+#         comment = request.POST.get('comm')
+#         author = request.POST.get('username')
+#         if comment != None and author != None:
+#             if Author.objects.filter(name=author).exists():
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             else:
+#                 author = Author.objects.create(name=author)
+#                 Comment.objects.create(post=post, author=author, content=comment)
+#             return redirect('post_details', pk)
 
-    return render(request, "Blog/post.html", {"post": post, "comments": comments})
+#     return render(request, "Blog/post.html", {"post": post, "comments": comments})
 
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'Blog/post.html'
+    context_object_name = 'post'
+
+    
 
 def comment_update(request, pk):
     comment = Comment.objects.get(id=pk)
