@@ -68,6 +68,15 @@ class PostDetailView(DetailView):
 #     return render(request, 'Blog/comment_update.html', {'form': form, 'comm': comment})
 
 
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = "Blog/comment_update.html"
+    context_object_name = "comm"
+
+    def url(self):
+        return reverse_lazy("post_details", args=[self.object.post.id])
+
 def category_list(request):
     if request.method == 'POST':
         name = request.POST['name']
