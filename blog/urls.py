@@ -5,7 +5,7 @@ from .views import (
     PostDetailView,
     category_details,
     category_list,
-    comment_update,
+    CommentUpdateView,
 )
 
 app_name = "blog"
