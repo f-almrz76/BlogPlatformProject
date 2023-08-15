@@ -49,6 +49,11 @@ class PostDetailView(DetailView):
     template_name = 'Blog/post.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comment_set.all()
+        return context
+    
     
 
 def comment_update(request, pk):
