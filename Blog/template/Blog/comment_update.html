@@ -1,0 +1,11 @@
+{%extends 'base.html'%}
+ {% block title%}
+        <title>All Posts </title>
+{%endblock title%}
+{% block content%}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_table }}
+        <button type="submit">submit</button>
+    </form>
+{% endblock content%}
