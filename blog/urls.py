@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, post_list,PostDetailView,category_details,category_list, update_comment
+from .views import home, post_list,PostDetailView,category_details,category_list, CommentUpdateView
 
 urlpatterns = [
     path('', home, name="home"),
@@ -7,6 +7,6 @@ urlpatterns = [
     path('post/<int:pk>/', PostDetailView.as_view(), name="post_details"),
     path('categories/', category_list, name="category_list"),
     path('categories/<int:pk>/', category_details, name="category_details"),
-    path('comments/<int:comment_id>/update/', update_comment, name='update_comment'),
+    path('comments/<int:comment_id>/update/', CommentUpdateView.as_view(), name='update_comment'),
 
 ]
